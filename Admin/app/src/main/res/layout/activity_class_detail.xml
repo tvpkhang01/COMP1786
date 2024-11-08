@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Date Field -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Date" />
+
+    <EditText
+        android:id="@+id/classDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="YYYY-MM-DD" />
+
+    <!-- Teacher Field -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Teacher" />
+
+    <EditText
+        android:id="@+id/classTeacher"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Teacher's Name" />
+
+    <!-- Comments Field -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Comments" />
+
+    <EditText
+        android:id="@+id/classComments"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter any comments (optional)" />
+
+    <!-- Save Button -->
+    <Button
+        android:id="@+id/saveClassButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Save"
+        android:backgroundTint="@color/blue"/>
+
+</LinearLayout>

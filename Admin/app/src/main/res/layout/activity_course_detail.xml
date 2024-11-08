@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Course Details Section -->
+    <TextView
+        android:id="@+id/courseName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Course Name"
+        android:textSize="20sp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/courseDay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Day of the Week" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Class Sessions"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:paddingTop="16dp"/>
+
+    <Button
+        android:id="@+id/addClassButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Class"
+        android:backgroundTint="@color/blue" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/classRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="8dp"/>
+
+</LinearLayout>
