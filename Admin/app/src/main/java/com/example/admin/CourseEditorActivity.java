@@ -1,14 +1,14 @@
 package com.example.admin;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class CourseEditorActivity extends AppCompatActivity {
@@ -30,17 +30,23 @@ public class CourseEditorActivity extends AppCompatActivity {
         Button save = findViewById(R.id.save);
         Database database = new Database(this);
 
-        List<String> selectedDaysList = new ArrayList<>();
 
         if (getIntent().hasExtra("Id")) {
+
             int Id = getIntent().getIntExtra("Id", -1);
+            Log.d("CourseEditorActivity", "Course ID: " + Id);
             Course course = database.readCourse(Id);
+            Log.d("CourseEditorActivity", "Time: " + course.getTime());
+            Log.d("CourseEditorActivity", "Duration: " + course.getDuration());
             if (course != null) {
-                name.setText(course.getName());
-                time.setText(course.getTime());
+                if (course.getTime() != null) {
+                    time.setText(course.getTime());
+                } else {
+                    time.setText("");
+                }
                 duration.setText(course.getDuration());
                 price.setText(String.valueOf(course.getPrice()));
-                capacity.setText(String.valueOf(course.getCapacity()));
+                capacity.setText(course.getCapacity());
                 switch (course.getType()) {
                     case "Flow Yoga":
                         flowYoga.setChecked(true);
@@ -80,8 +86,7 @@ public class CourseEditorActivity extends AppCompatActivity {
                     return;
                 }
 
-                course.setName(name.getText().toString());
-                course.setDay(String.join(", ", selectedDaysList));
+//                course.setDay(String.join(", ", selectedDaysList));
                 course.setTime(time.getText().toString());
                 course.setCapacity(Integer.parseInt(capacity.getText().toString()));
                 course.setDuration(Integer.parseInt(duration.getText().toString()));
@@ -89,7 +94,7 @@ public class CourseEditorActivity extends AppCompatActivity {
                 RadioButton radioButton = findViewById(type.getCheckedRadioButtonId());
                 course.setType(radioButton.getText().toString());
                 course.setDescription(description.getText().toString());
-                database.addCourse(course);
+                database.updateCourse(course);
                 Toast.makeText(this, "Course saved successfully", Toast.LENGTH_SHORT).show();
                 finish();
             });
@@ -121,8 +126,8 @@ public class CourseEditorActivity extends AppCompatActivity {
                 }
 
                 Course course = new Course();
-                course.setName(name.getText().toString());
-                course.setDay(String.join(", ", selectedDaysList));
+
+//                course.setDay(String.join(", ", selectedDaysList));
                 course.setTime(time.getText().toString());
                 course.setCapacity(Integer.parseInt(capacity.getText().toString()));
                 course.setDuration(Integer.parseInt(duration.getText().toString()));

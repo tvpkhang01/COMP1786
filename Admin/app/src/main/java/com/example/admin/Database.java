@@ -28,7 +28,6 @@ public class Database extends SQLiteOpenHelper {
     private void createCourseTable(SQLiteDatabase db) {
         String courseTable = "CREATE TABLE IF NOT EXISTS `Course` (" +
                 "`Id` INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "`Name` TEXT, " +
                 "`DayOfWeek` TEXT, " +
                 "`Duration` INTEGER, " +
                 "`Time` TEXT, " +
@@ -42,8 +41,7 @@ public class Database extends SQLiteOpenHelper {
     public void addCourse(Course course) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put("Name", course.getName());
-        values.put("DayOfWeek", course.getDay());
+        values.put("DayOfWeek", course.getDayOfWeek());
         values.put("Duration", course.getDuration());
         values.put("Time", course.getTime());
         values.put("Price", course.getPrice());
@@ -65,14 +63,13 @@ public class Database extends SQLiteOpenHelper {
             do {
                 Course course = new Course();
                 course.setId(cursor.getInt(0));
-                course.setName(cursor.getString(1));
-                course.setDay(cursor.getString(2));
-                course.setDuration(cursor.getInt(3));
-                course.setTime(cursor.getString(4));
-                course.setPrice(cursor.getDouble(5));
-                course.setCapacity(cursor.getInt(6));
-                course.setType(cursor.getString(7));
-                course.setDescription(cursor.getString(8));
+                course.setDayOfWeek(cursor.getString(1));
+                course.setDuration(cursor.getInt(2));
+                course.setTime(cursor.getString(3));
+                course.setPrice(cursor.getDouble(4));
+                course.setCapacity(cursor.getInt(5));
+                course.setType(cursor.getString(6));
+                course.setDescription(cursor.getString(7));
                 courses.add(course);
             } while (cursor.moveToNext());
         }
@@ -88,14 +85,13 @@ public class Database extends SQLiteOpenHelper {
 
         if (cursor.moveToFirst()) {
             course.setId(cursor.getInt(0));
-            course.setName(cursor.getString(1));
-            course.setDay(cursor.getString(2));
-            course.setDuration(cursor.getInt(3));
-            course.setTime(cursor.getString(4));
-            course.setPrice(cursor.getDouble(5));
-            course.setCapacity(cursor.getInt(6));
-            course.setType(cursor.getString(7));
-            course.setDescription(cursor.getString(8));
+            course.setDayOfWeek(cursor.getString(1));
+            course.setDuration(cursor.getInt(2));
+            course.setTime(cursor.getString(3));
+            course.setPrice(cursor.getDouble(4));
+            course.setCapacity(cursor.getInt(5));
+            course.setType(cursor.getString(6));
+            course.setDescription(cursor.getString(7));
         }
         cursor.close();
         return course;
@@ -104,8 +100,7 @@ public class Database extends SQLiteOpenHelper {
     public void updateCourse(Course course) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put("Name", course.getName());
-        values.put("DayOfWeek", course.getDay());
+        values.put("DayOfWeek", course.getDayOfWeek());
         values.put("Duration", course.getDuration());
         values.put("Time", course.getTime());
         values.put("Price", course.getPrice());

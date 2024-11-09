@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
             Button delete = view.findViewById(R.id.delete);
             Course course = courses.get(position);
 
-            name.setText(course.getName());
+            name.setText("Course " + course.getId());
             edit.setOnClickListener(v -> {
                 Intent intent = new Intent(MainActivity.this, CourseEditorActivity.class);
                 intent.putExtra("Id", course.getId());

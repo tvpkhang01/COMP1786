@@ -3,8 +3,7 @@ package com.example.admin;
 public class Course {
 
     private int Id;
-    private String name;
-    private String day;
+    private String dayOfWeek;
     private String time;
     private int capacity;
     private int duration;
@@ -23,20 +22,12 @@ public class Course {
         this.Id = Id;
     }
 
-    public String getName() {
-        return name;
+    public String getDayOfWeek() {
+        return dayOfWeek;
     }
 
-    public void setName(String courseName) {
-        this.name = courseName;
-    }
-
-    public String getDay() {
-        return day;
-    }
-
-    public void setDay(String day) {
-        this.day = day;
+    public void setDayOfWeek(String dayOfWeek) {
+        this.dayOfWeek = dayOfWeek;
     }
 
     public String getTime() {
