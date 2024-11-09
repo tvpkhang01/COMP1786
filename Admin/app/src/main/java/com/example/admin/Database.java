@@ -3,15 +3,20 @@ package com.example.admin;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 
 public class Database extends SQLiteOpenHelper {
 
+    private static final String DATABASE_NAME = "Database";
+    private static final int DATABASE_VERSION = 1;
+
     public Database(Context context) {
-        super(context, "Database", null, 1);
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override
@@ -22,7 +27,9 @@ public class Database extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        db.execSQL("DROP TABLE IF EXISTS `Course`");
+        db.execSQL("DROP TABLE IF EXISTS `Class`");
+        onCreate(db);
     }
 
     private void createCourseTable(SQLiteDatabase db) {
@@ -49,14 +56,24 @@ public class Database extends SQLiteOpenHelper {
         values.put("Type", course.getType());
         values.put("Description", course.getDescription());
 
-        db.insert("Course", null, values);
-        db.close();
+        try {
+            long result = db.insert("Course", null, values);
+            if (result == -1) {
+                Log.e("Database", "Failed to insert course");
+            } else {
+                Log.d("Database", "Course inserted successfully with ID: " + result);
+            }
+        } catch (SQLException e) {
+            Log.e("Database", "Error inserting course: " + e.getMessage());
+        } finally {
+            db.close();
+        }
     }
 
     public ArrayList<Course> getCourses() {
         SQLiteDatabase db = this.getReadableDatabase();
         ArrayList<Course> courses = new ArrayList<>();
-        String select = "SELECT * FROM `Course`;";
+        String select = "SELECT * FROM `Course`";
         Cursor cursor = db.rawQuery(select, null);
 
         if (cursor.moveToFirst()) {
@@ -74,12 +91,13 @@ public class Database extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
         }
         cursor.close();
+        db.close();
         return courses;
     }
 
     public Course readCourse(int Id) {
         SQLiteDatabase db = this.getReadableDatabase();
-        String select = "SELECT * FROM `Course` WHERE `Id` = ?;";
+        String select = "SELECT * FROM `Course` WHERE `Id` = ?";
         Cursor cursor = db.rawQuery(select, new String[]{String.valueOf(Id)});
         Course course = new Course();
 
@@ -94,6 +112,7 @@ public class Database extends SQLiteOpenHelper {
             course.setDescription(cursor.getString(7));
         }
         cursor.close();
+        db.close();
         return course;
     }
 
@@ -108,13 +127,23 @@ public class Database extends SQLiteOpenHelper {
         values.put("Type", course.getType());
         values.put("Description", course.getDescription());
 
-        db.update("Course", values, "Id = ?", new String[]{String.valueOf(course.getId())});
+        int rowsAffected = db.update("Course", values, "Id = ?", new String[]{String.valueOf(course.getId())});
+        if (rowsAffected > 0) {
+            Log.d("Database", "Course updated successfully");
+        } else {
+            Log.e("Database", "Failed to update course");
+        }
         db.close();
     }
 
     public void deleteCourse(int Id) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete("Course", "Id = ?", new String[]{String.valueOf(Id)});
+        int rowsDeleted = db.delete("Course", "Id = ?", new String[]{String.valueOf(Id)});
+        if (rowsDeleted > 0) {
+            Log.d("Database", "Course deleted successfully");
+        } else {
+            Log.e("Database", "Failed to delete course");
+        }
         db.close();
     }
 

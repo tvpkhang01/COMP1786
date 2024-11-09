@@ -8,8 +8,11 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class CourseEditorActivity extends AppCompatActivity {
 
@@ -17,7 +20,8 @@ public class CourseEditorActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_editor);
-        EditText name = findViewById(R.id.name);
+
+        EditText dayOfWeek = findViewById(R.id.dayOfWeek);
         EditText time = findViewById(R.id.time);
         EditText capacity = findViewById(R.id.capacity);
         EditText duration = findViewById(R.id.duration);
@@ -30,23 +34,48 @@ public class CourseEditorActivity extends AppCompatActivity {
         Button save = findViewById(R.id.save);
         Database database = new Database(this);
 
+        ArrayList<String> selectedDaysList = new ArrayList<>();
+
+        // List of days to show in the popup
+        String[] daysArray = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
+        boolean[] selectedDays = new boolean[daysArray.length];
+
+        // Show modal popup for selecting days of the week
+        dayOfWeek.setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Select Days of the Week");
+            builder.setMultiChoiceItems(daysArray, selectedDays, (dialog, which, isChecked) -> {
+                if (isChecked) {
+                    selectedDaysList.add(daysArray[which]);
+                } else {
+                    selectedDaysList.remove(daysArray[which]);
+                }
+            });
+
+            builder.setPositiveButton("OK", (dialog, which) -> {
+                dayOfWeek.setText(String.join(", ", selectedDaysList));
+                dialog.dismiss();
+            });
+            builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+
+            builder.create().show();
+        });
 
         if (getIntent().hasExtra("Id")) {
-
             int Id = getIntent().getIntExtra("Id", -1);
             Log.d("CourseEditorActivity", "Course ID: " + Id);
             Course course = database.readCourse(Id);
             Log.d("CourseEditorActivity", "Time: " + course.getTime());
             Log.d("CourseEditorActivity", "Duration: " + course.getDuration());
+            Log.d("CourseEditorActivity", "Capacity: " + course.getCapacity());
+
             if (course != null) {
-                if (course.getTime() != null) {
-                    time.setText(course.getTime());
-                } else {
-                    time.setText("");
-                }
-                duration.setText(course.getDuration());
+                dayOfWeek.setText(course.getDayOfWeek()); // Set saved days if editing
+                time.setText(course.getTime());
+                duration.setText(String.valueOf(course.getDuration()));
                 price.setText(String.valueOf(course.getPrice()));
-                capacity.setText(course.getCapacity());
+                capacity.setText(String.valueOf(course.getCapacity()));
+
                 switch (course.getType()) {
                     case "Flow Yoga":
                         flowYoga.setChecked(true);
@@ -60,85 +89,59 @@ public class CourseEditorActivity extends AppCompatActivity {
                 }
                 description.setText(course.getDescription());
             }
-            save.setOnClickListener(v -> {
-                if (name.getText().toString().equals("")) {
-                    name.setError("Please enter name");
-                    return;
-                }
-                if (time.getText().toString().isEmpty()) {
-                    time.setError("Please enter time");
-                    return;
-                }
-                if (capacity.getText().toString().isEmpty()) {
-                    capacity.setError("Please enter capacity");
-                    return;
-                }
-                if (duration.getText().toString().isEmpty()) {
-                    duration.setError("Please enter duration");
-                    return;
-                }
-                if (price.getText().toString().isEmpty()) {
-                    price.setError("Please enter price");
-                    return;
-                }
-                if (type.getCheckedRadioButtonId() == -1) {
-                    Toast.makeText(this, "Please select type of class", Toast.LENGTH_SHORT).show();
-                    return;
-                }
 
-//                course.setDay(String.join(", ", selectedDaysList));
-                course.setTime(time.getText().toString());
-                course.setCapacity(Integer.parseInt(capacity.getText().toString()));
-                course.setDuration(Integer.parseInt(duration.getText().toString()));
-                course.setPrice(Double.parseDouble(price.getText().toString()));
-                RadioButton radioButton = findViewById(type.getCheckedRadioButtonId());
-                course.setType(radioButton.getText().toString());
-                course.setDescription(description.getText().toString());
-                database.updateCourse(course);
-                Toast.makeText(this, "Course saved successfully", Toast.LENGTH_SHORT).show();
-                finish();
-            });
+            save.setOnClickListener(v -> saveCourseData(dayOfWeek, time, capacity, duration, price, type, description, database, course, selectedDaysList));
         } else {
-            save.setOnClickListener(v -> {
-                if (name.getText().toString().equals("")) {
-                    name.setError("Please enter name");
-                    return;
-                }
-                if (time.getText().toString().trim().isEmpty()) {
-                    time.setError("Please enter time");
-                    return;
-                }
-                if (capacity.getText().toString().trim().isEmpty()) {
-                    capacity.setError("Please enter capacity");
-                    return;
-                }
-                if (duration.getText().toString().trim().isEmpty()) {
-                    duration.setError("Please enter duration");
-                    return;
-                }
-                if (price.getText().toString().trim().isEmpty()) {
-                    price.setError("Please enter price");
-                    return;
-                }
-                if (type.getCheckedRadioButtonId() == -1) {
-                    Toast.makeText(this, "Please select type of class", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+            save.setOnClickListener(v -> saveCourseData(dayOfWeek, time, capacity, duration, price, type, description, database, new Course(), selectedDaysList));
+        }
+    }
 
-                Course course = new Course();
-
-//                course.setDay(String.join(", ", selectedDaysList));
-                course.setTime(time.getText().toString());
-                course.setCapacity(Integer.parseInt(capacity.getText().toString()));
-                course.setDuration(Integer.parseInt(duration.getText().toString()));
-                course.setPrice(Double.parseDouble(price.getText().toString()));
-                RadioButton radioButton = findViewById(type.getCheckedRadioButtonId());
-                course.setType(radioButton.getText().toString());
-                course.setDescription(description.getText().toString());
+    private void saveCourseData(EditText dayofWeek, EditText time, EditText capacity, EditText duration, EditText price, RadioGroup type, EditText description, Database database, Course course, ArrayList<String> selectedDaysList) {
+        if (validateFields(dayofWeek, time, capacity, duration, price, type)) {
+            course.setDayOfWeek(String.join(", ", selectedDaysList));  // Save selected days
+            course.setTime(time.getText().toString());
+            course.setCapacity(Integer.parseInt(capacity.getText().toString()));
+            course.setDuration(Integer.parseInt(duration.getText().toString()));
+            course.setPrice(Double.parseDouble(price.getText().toString()));
+            RadioButton radioButton = findViewById(type.getCheckedRadioButtonId());
+            course.setType(radioButton.getText().toString());
+            course.setDescription(description.getText().toString());
+            Log.d("CourseEditorActivity", "Id: " + course.getId());
+            if (course.getId() == 0) {
                 database.addCourse(course);
                 Toast.makeText(this, "Course saved successfully", Toast.LENGTH_SHORT).show();
-                finish();
-            });
+            } else {
+                database.updateCourse(course);
+                Toast.makeText(this, "Course updated successfully", Toast.LENGTH_SHORT).show();
+            }
+            finish();
         }
+    }
+
+    private boolean validateFields(EditText dayofWeek, EditText time, EditText capacity, EditText duration, EditText price, RadioGroup type) {
+        if (dayofWeek.getText().toString().isEmpty()) {
+            dayofWeek.setError("Please enter at least one day");
+        }
+        if (time.getText().toString().isEmpty()) {
+            time.setError("Please enter time");
+            return false;
+        }
+        if (capacity.getText().toString().isEmpty()) {
+            capacity.setError("Please enter capacity");
+            return false;
+        }
+        if (duration.getText().toString().isEmpty()) {
+            duration.setError("Please enter duration");
+            return false;
+        }
+        if (price.getText().toString().isEmpty()) {
+            price.setError("Please enter price");
+            return false;
+        }
+        if (type.getCheckedRadioButtonId() == -1) {
+            Toast.makeText(this, "Please select type of class", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
     }
 }
