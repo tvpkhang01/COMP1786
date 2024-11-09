@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Button add = findViewById(R.id.add);
+        courses_list = findViewById(R.id.courses_list);
         database = new Database(this);
 
         add.setOnClickListener(v -> {
@@ -71,9 +72,18 @@ public class MainActivity extends AppCompatActivity {
             TextView name = view.findViewById(R.id.name);
             Button edit = view.findViewById(R.id.edit);
             Button delete = view.findViewById(R.id.delete);
-
             Course course = courses.get(position);
+
             name.setText(course.getName());
+            edit.setOnClickListener(v -> {
+                Intent intent = new Intent(MainActivity.this, CourseEditorActivity.class);
+                intent.putExtra("Id", course.getId());
+                startActivity(intent);
+            });
+            delete.setOnClickListener(v -> {
+                database.deleteCourse(course.getId());
+                finish();
+            });
             return view;
         }
     }
