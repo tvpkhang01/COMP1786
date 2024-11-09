@@ -2,33 +2,29 @@ package com.example.admin;
 
 public class Class {
 
-    private long id;
-    private long courseId;
+    private int Id;
+    private int courseId;
     private String date;
     private String teacher;
     private String comments;
 
-    public Class(long id, long courseId, String date, String teacher, String comments) {
-        this.id = id;
-        this.courseId = courseId;
-        this.date = date;
-        this.teacher = teacher;
-        this.comments = comments;
+    public Class() {
+
     }
 
     public long getId() {
-        return id;
+        return Id;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setId(int Id) {
+        this.Id = Id;
     }
 
     public long getCourseId() {
         return courseId;
     }
 
-    public void setCourseId(long courseId) {
+    public void setCourseId(int courseId) {
         this.courseId = courseId;
     }
 

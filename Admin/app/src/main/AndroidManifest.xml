@@ -13,13 +13,7 @@
         android:theme="@style/Theme.Admin"
         tools:targetApi="31">
         <activity
-            android:name=".ClassDetailActivity"
-            android:exported="false" />
-        <activity
-            android:name=".CourseDetail"
-            android:exported="false" />
-        <activity
-            android:name=".CourseEditor"
+            android:name=".CourseEditorActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

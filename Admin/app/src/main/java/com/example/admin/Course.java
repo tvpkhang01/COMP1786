@@ -2,8 +2,8 @@ package com.example.admin;
 
 public class Course {
 
-    private long id;
-    private String courseName;
+    private int Id;
+    private String name;
     private String day;
     private String time;
     private int capacity;
@@ -12,33 +12,23 @@ public class Course {
     private String type;
     private String description;
 
-    public Course(long id, String courseName, String day, String time, int capacity, int duration, double price, String type, String description) {
-        this.id = id;
-        this.courseName = courseName;
-        this.day = day;
-        this.time = time;
-        this.capacity = capacity;
-        this.duration = duration;
-        this.price = price;
-        this.type = type;
-        this.description = description;
+    public Course() {
     }
 
-    // Getter and Setter Methods
-    public long getId() {
-        return id;
+    public int getId() {
+        return Id;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setId(int Id) {
+        this.Id = Id;
     }
 
-    public String getCourseName() {
-        return courseName;
+    public String getName() {
+        return name;
     }
 
-    public void setCourseName(String courseName) {
-        this.courseName = courseName;
+    public void setName(String courseName) {
+        this.name = courseName;
     }
 
     public String getDay() {
