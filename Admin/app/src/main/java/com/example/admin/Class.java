@@ -12,7 +12,7 @@ public class Class {
 
     }
 
-    public long getId() {
+    public int getId() {
         return Id;
     }
 
@@ -20,7 +20,7 @@ public class Class {
         this.Id = Id;
     }
 
-    public long getCourseId() {
+    public int getCourseId() {
         return courseId;
     }
 

@@ -34,6 +34,11 @@ public class MainActivity extends AppCompatActivity {
         refreshList();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        refreshList();
+    }
 
     private void refreshList() {
         ArrayList<Course> courses = database.getCourses();
@@ -63,7 +68,6 @@ public class MainActivity extends AppCompatActivity {
             return position;
         }
 
-
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             @SuppressLint("ViewHolder")
@@ -82,7 +86,6 @@ public class MainActivity extends AppCompatActivity {
             });
             delete.setOnClickListener(v -> {
                 database.deleteCourse(course.getId());
-                finish();
             });
             return view;
         }
