@@ -12,7 +12,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class CourseEditorActivity extends AppCompatActivity {
 
@@ -36,11 +35,9 @@ public class CourseEditorActivity extends AppCompatActivity {
 
         ArrayList<String> selectedDaysList = new ArrayList<>();
 
-        // List of days to show in the popup
         String[] daysArray = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
         boolean[] selectedDays = new boolean[daysArray.length];
 
-        // Show modal popup for selecting days of the week
         dayOfWeek.setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Select Days of the Week");

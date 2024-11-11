@@ -1,7 +1,6 @@
 package com.example.admin;
 
 import android.annotation.SuppressLint;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,6 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -82,7 +82,6 @@ public class MainActivity extends AppCompatActivity {
             Button delete = convertView.findViewById(R.id.delete);
             Course course = courses.get(position);
 
-            // Assuming 'course' has a method getName() to display its name
             name.setText("Course: " + course.getId());
 
             edit.setOnClickListener(v -> {
@@ -101,8 +100,9 @@ public class MainActivity extends AppCompatActivity {
                     .setTitle("Delete Course")
                     .setMessage("Are you sure you want to delete this course?")
                     .setPositiveButton("Yes", (dialog, which) -> {
+                        Toast.makeText(MainActivity.this, "Course deleted successfully", Toast.LENGTH_SHORT).show();
                         database.deleteCourse(course.getId());
-                        refreshList(); // Refresh list after deletion
+                        refreshList();
                     })
                     .setNegativeButton("No", null)
                     .show();
