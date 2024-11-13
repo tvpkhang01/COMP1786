@@ -9,7 +9,6 @@ public class Class {
     private String comments;
 
     public Class() {
-
     }
 
     public int getId() {

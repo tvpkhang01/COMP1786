@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
         Button add = findViewById(R.id.add);
         courses_list = findViewById(R.id.courses_list);
         database = new Database(this);
-
         add.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, CourseEditorActivity.class);
             startActivity(intent);
@@ -82,10 +82,11 @@ public class MainActivity extends AppCompatActivity {
             Button delete = convertView.findViewById(R.id.delete);
             Course course = courses.get(position);
 
-            name.setText("Course: " + course.getId());
+            name.setText("Course " + course.getId());
 
             name.setOnClickListener(v-> {
                 Intent intent = new Intent(MainActivity.this, MainActivity2.class);
+                intent.putExtra("courseId", course.getId());
                 startActivity(intent);
             });
 
@@ -95,22 +96,20 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             });
 
-            delete.setOnClickListener(v -> showDeleteConfirmation(course));
+            delete.setOnClickListener(v -> {
+                new AlertDialog.Builder(MainActivity.this)
+                        .setTitle("Delete Course")
+                        .setMessage("Are you sure you want to delete this course?")
+                        .setPositiveButton("Yes", (dialog, which) -> {
+                            Toast.makeText(MainActivity.this, "Course deleted successfully", Toast.LENGTH_SHORT).show();
+                            database.deleteCourse(course.getId());
+                            refreshList();
+                        })
+                        .setNegativeButton("No", null)
+                        .show();
+            });
 
             return convertView;
-        }
-
-        private void showDeleteConfirmation(Course course) {
-            new AlertDialog.Builder(MainActivity.this)
-                    .setTitle("Delete Course")
-                    .setMessage("Are you sure you want to delete this course?")
-                    .setPositiveButton("Yes", (dialog, which) -> {
-                        Toast.makeText(MainActivity.this, "Course deleted successfully", Toast.LENGTH_SHORT).show();
-                        database.deleteCourse(course.getId());
-                        refreshList();
-                    })
-                    .setNegativeButton("No", null)
-                    .show();
         }
     }
 }

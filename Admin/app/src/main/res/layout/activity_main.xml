@@ -25,16 +25,6 @@
             android:textSize="@dimen/_24sdp"
             android:textStyle="bold" />
 
-        <EditText
-            android:id="@+id/search"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/_16sdp"
-            android:background="@android:drawable/edit_text"
-            android:hint="Search..."
-            android:padding="@dimen/_10sdp"
-            android:textColor="@android:color/black" />
-
         <ListView
             android:id="@+id/courses_list"
             android:layout_width="match_parent"

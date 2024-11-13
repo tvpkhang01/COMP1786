@@ -44,6 +44,7 @@
         android:layout_height="@dimen/_48sdp"
         android:text="Save"
         android:textColor="@android:color/white"
+        android:backgroundTint="@android:color/holo_blue_light"
         android:textSize="@dimen/_16sdp"
         android:layout_marginTop="@dimen/_200sdp"/>
 

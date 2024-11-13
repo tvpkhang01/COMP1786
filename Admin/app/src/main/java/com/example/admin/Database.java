@@ -171,11 +171,11 @@ public class Database extends SQLiteOpenHelper {
         db.close();
     }
 
-    public ArrayList<Class> getClasses() {
+    public ArrayList<Class> getClasses(int courseId) {
         SQLiteDatabase db = this.getReadableDatabase();
         ArrayList<Class> classes = new ArrayList<>();
-        String select = "SELECT * FROM `Class`;";
-        Cursor cursor = db.rawQuery(select, null);
+        String select = "SELECT * FROM `Class` WHERE courseId = ?;";
+        Cursor cursor = db.rawQuery(select, new String[]{String.valueOf(courseId)});
 
         if (cursor.moveToFirst()) {
             do {
