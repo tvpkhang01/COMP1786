@@ -84,6 +84,11 @@ public class MainActivity extends AppCompatActivity {
 
             name.setText("Course: " + course.getId());
 
+            name.setOnClickListener(v-> {
+                Intent intent = new Intent(MainActivity.this, MainActivity2.class);
+                startActivity(intent);
+            });
+
             edit.setOnClickListener(v -> {
                 Intent intent = new Intent(MainActivity.this, CourseEditorActivity.class);
                 intent.putExtra("Id", course.getId());
