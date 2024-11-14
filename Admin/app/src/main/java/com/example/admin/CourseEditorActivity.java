@@ -1,5 +1,6 @@
 package com.example.admin;
 
+import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -11,6 +12,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class CourseEditorActivity extends AppCompatActivity {
@@ -34,7 +37,6 @@ public class CourseEditorActivity extends AppCompatActivity {
         Database database = new Database(this);
 
         ArrayList<String> selectedDaysList = new ArrayList<>();
-
         String[] daysArray = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
         boolean[] selectedDays = new boolean[daysArray.length];
 
@@ -56,6 +58,26 @@ public class CourseEditorActivity extends AppCompatActivity {
             builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
 
             builder.create().show();
+        });
+
+        time.setOnClickListener(v -> {
+            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+            TimePickerDialog startTimePicker = new TimePickerDialog(this, (view, startHour, startMinute) -> {
+                LocalTime startTime = LocalTime.of(startHour, startMinute);
+
+                TimePickerDialog endTimePicker = new TimePickerDialog(this, (view1, endHour, endMinute) -> {
+                    LocalTime endTime = LocalTime.of(endHour, endMinute);
+
+                    String formattedTime = startTime.format(timeFormatter) + "-" + endTime.format(timeFormatter);
+                    time.setText(formattedTime);
+
+                }, 0, 0, true);
+                endTimePicker.setTitle("Select End Time");
+                endTimePicker.show();
+
+            }, LocalTime.now().getHour(), LocalTime.now().getMinute(), true);
+            startTimePicker.setTitle("Select Start Time");
+            startTimePicker.show();
         });
 
         if (getIntent().hasExtra("Id")) {

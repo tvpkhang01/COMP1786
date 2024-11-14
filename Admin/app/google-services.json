@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "226935707095",
+    "project_id": "comp-1786-database",
+    "storage_bucket": "comp-1786-database.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:226935707095:android:4efd6315c5b5df808ce792",
+        "android_client_info": {
+          "package_name": "com.example.admin"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAPcbzjtXvMnDQjQ2cLIIqtEDtTARNE5wY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

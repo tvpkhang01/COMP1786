@@ -3,6 +3,7 @@ package com.example.admin;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -27,9 +31,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Button add = findViewById(R.id.add);
         courses_list = findViewById(R.id.courses_list);
         database = new Database(this);
+        database.syncDataToFirebase();
+        Button sync = findViewById(R.id.sync);
+        sync.setOnClickListener(v -> {
+            database.syncDataToFirebase();
+        });
+        Button add = findViewById(R.id.add);
         add.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, CourseEditorActivity.class);
             startActivity(intent);
@@ -76,26 +85,21 @@ public class MainActivity extends AppCompatActivity {
             if (convertView == null) {
                 convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.course_item, parent, false);
             }
-
             TextView name = convertView.findViewById(R.id.name);
             Button edit = convertView.findViewById(R.id.edit);
             Button delete = convertView.findViewById(R.id.delete);
             Course course = courses.get(position);
-
             name.setText("Course " + course.getId());
-
-            name.setOnClickListener(v-> {
+            name.setOnClickListener(v -> {
                 Intent intent = new Intent(MainActivity.this, MainActivity2.class);
                 intent.putExtra("courseId", course.getId());
                 startActivity(intent);
             });
-
             edit.setOnClickListener(v -> {
                 Intent intent = new Intent(MainActivity.this, CourseEditorActivity.class);
                 intent.putExtra("Id", course.getId());
                 startActivity(intent);
             });
-
             delete.setOnClickListener(v -> {
                 new AlertDialog.Builder(MainActivity.this)
                         .setTitle("Delete Course")
@@ -108,7 +112,6 @@ public class MainActivity extends AppCompatActivity {
                         .setNegativeButton("No", null)
                         .show();
             });
-
             return convertView;
         }
     }

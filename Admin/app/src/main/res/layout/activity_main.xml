@@ -40,5 +40,14 @@
             android:backgroundTint="@android:color/holo_blue_light"
             android:text="Add"
             android:textColor="@android:color/white" />
+
+        <Button
+            android:id="@+id/sync"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/_28sdp"
+            android:backgroundTint="@android:color/holo_green_light"
+            android:text="Sync to Firebase"
+            android:textColor="@android:color/white" />
     </LinearLayout>
 </RelativeLayout>
