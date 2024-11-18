@@ -10,8 +10,6 @@ export default function ClassesScreen() {
   const { courseId } = route.params;
   const [classes, setClasses] = useState([]);
 
-  console.log(classes);
-
   useEffect(() => {
     const classesRef = ref(database, `classes/`);
     const showData = onValue(classesRef, (snapshot) => {

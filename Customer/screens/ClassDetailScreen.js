@@ -40,6 +40,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
+    paddingTop: 55,
     backgroundColor: "#f8f9fa",
   },
   loadingText: {

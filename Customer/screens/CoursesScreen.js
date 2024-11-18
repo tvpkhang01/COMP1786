@@ -15,8 +15,6 @@ export default function CoursesScreen() {
   const navigation = useNavigation();
   const [courses, setCourses] = useState([]);
 
-  console.log(courses);
-
   useEffect(() => {
     const coursesRef = ref(database, "courses/");
     const showData = onValue(coursesRef, (snapshot) => {
