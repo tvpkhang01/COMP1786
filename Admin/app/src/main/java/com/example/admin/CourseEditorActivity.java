@@ -71,11 +71,11 @@ public class CourseEditorActivity extends AppCompatActivity {
                     String formattedTime = startTime.format(timeFormatter) + "-" + endTime.format(timeFormatter);
                     time.setText(formattedTime);
 
-                }, 0, 0, true);
+                }, startTime.getHour(), startTime.getMinute(), true);
                 endTimePicker.setTitle("Select End Time");
                 endTimePicker.show();
 
-            }, LocalTime.now().getHour(), LocalTime.now().getMinute(), true);
+            }, 0, 0, true);
             startTimePicker.setTitle("Select Start Time");
             startTimePicker.show();
         });
