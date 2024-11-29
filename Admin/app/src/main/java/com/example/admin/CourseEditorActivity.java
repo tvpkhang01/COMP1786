@@ -117,7 +117,9 @@ public class CourseEditorActivity extends AppCompatActivity {
 
     private void saveCourseData(EditText dayofWeek, EditText time, EditText capacity, EditText duration, EditText price, RadioGroup type, EditText description, Database database, Course course, ArrayList<String> selectedDaysList) {
         if (validateFields(dayofWeek, time, capacity, duration, price, type)) {
-            course.setDayOfWeek(String.join(", ", selectedDaysList));
+            if (!selectedDaysList.isEmpty()) {
+                course.setDayOfWeek(String.join(", ", selectedDaysList));
+            }
             course.setTime(time.getText().toString());
             course.setCapacity(Integer.parseInt(capacity.getText().toString()));
             course.setDuration(Integer.parseInt(duration.getText().toString()));
